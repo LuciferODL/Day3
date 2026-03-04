@@ -63,5 +63,39 @@ namespace Day3.Controllers
             product.Description = updatedProduct.Description;
             return RedirectToAction("Index");
         }
+        //Xoa SP
+        public IActionResult Delete(int id)
+        {
+            var product = products.FirstOrDefault(x => x.Id == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            products.Remove(product);
+            return RedirectToAction("Index");
+        }
+        //Hien thi form xac nhan xoa SP
+        public IActionResult ConfirmDelete(int id)
+        {
+            var product = products.FirstOrDefault(x => x.Id == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return View(product);
+        }
+        //Tim kiem SP theo ten
+        public IActionResult Search(string keyword)
+        {
+            var searchResults = products.Where(p => p.Name != null && p.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase)).ToList();
+            return View(searchResults);
+        }
+        //Xu li DL tu form tim kiem SP
+        [HttpPost]
+        public IActionResult SearchResults(string keyword)
+        {
+            var searchResults = products.Where(p => p.Name != null && p.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase)).ToList();
+            return View(searchResults);
+        }
     }
 }
